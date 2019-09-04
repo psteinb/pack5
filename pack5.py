@@ -72,6 +72,9 @@ def main():
         print(f"Error: Number of json files {len(jsonf)} does not match number of numpy files {len(npf)}")
         sys.exit(1)
 
+    npf = sorted(npf)
+    jsonf = sorted(jsonf)
+
     arrays = [ np.load(f) for f in npf ]
     jattr  = [ json.load(open(j)) for j in jsonf ]
 
@@ -90,6 +93,7 @@ def main():
     h5o = h5py.File(str(output))
 
     for fi,ar,js in zip(npf,arrays,jattr):
+        print("packing",fi,"with",jsonf[npf.index(fi)],"in",output)
         ds = h5o.create_dataset(str(fi),
                                 data=ar,
                                 compression="lzf")
